@@ -1,4 +1,4 @@
-from src.jobs.base_job import EmailJob
+from src.base_job import EmailJob
 import re
 
 class MetricsJob(EmailJob):

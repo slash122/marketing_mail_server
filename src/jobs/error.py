@@ -1,4 +1,4 @@
-from src.jobs.base_job import EmailJob
+from src.base_job import EmailJob
 from src.utils import perform_ai_request
 
 class ErrorJob(EmailJob):
