@@ -1,6 +1,6 @@
 from email import message_from_bytes
 from typing import Dict
-from app_settings import app_settings
+from src.app_settings import app_settings
 from lxml import etree
 import google.generativeai as genai
 

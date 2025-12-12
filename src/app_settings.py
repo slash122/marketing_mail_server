@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 class AppSettings(BaseSettings):
     AI_MODEL_NAME: str = "gemini-2.5-flash-lite"
     AI_API_KEY: str
-    AI_MOCK_RESPONSES: str = "false"
+    MOCK_RESPONSES: bool = False
     SMTP_PORT: int = 1025
     SMTP_HOST: str = "0.0.0.0"
 

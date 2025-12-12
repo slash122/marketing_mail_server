@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import sys
 import os
 import traceback
+from src.app_settings import app_settings
 
 class EmailJob(ABC):
     def __init__(self, email_data):
@@ -12,7 +13,7 @@ class EmailJob(ABC):
 
     async def execute(self):
         try:
-            result = await self.run()
+            result = await (self.mock_run() if app_settings.MOCK_RESPONSES else self.run())
             await self.validate(result)
             return {'job_name': self.job_name, 'result': result}
         except Exception as e:
@@ -31,6 +32,10 @@ class EmailJob(ABC):
 
     async def validate(self, result):
         pass
+
+    async def mock_run(self):
+        # Run the standard run method if mock is not implemented for child
+        return await self.run()
     
     @property
     def job_name(self):

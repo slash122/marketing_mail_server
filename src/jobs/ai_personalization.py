@@ -29,7 +29,19 @@ class AiPersonalizationJob(EmailJob):
       for key in required_keys:
          if key not in response_json:
             raise ValueError(f"Missing key in response JSON: {key}")
-        
+   
+   async def mock_run(self):
+      return {
+         "tech_stack": {"raw_score": 2, "weighted_points": 12},
+         "subject_line": {"raw_score": 2, "weighted_points": 4},
+         "textual_personalization": {"raw_score": 3, "weighted_points": 18},
+         "visual_content": {"raw_score": 2, "weighted_points": 12},
+         "personalization_modules": {"raw_score": 1, "weighted_points": 5},
+         "campaign_tracking": {"raw_score": 2, "weighted_points": 8},
+         "dynamic_asset_structuring": {"raw_score": 2, "weighted_points": 2},
+         "total_score": 61,
+         "maturity_level": 5
+      }
     
    prompt_template = """
 You are an email personalization analyst. Given the HTML code, UTMs, image URLs, personalization tags, and other metadata for a single email campaign, 
