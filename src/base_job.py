@@ -3,14 +3,15 @@ import sys
 import os
 import traceback
 from src.app_settings import app_settings
+from src.mail_context import MailContext
 
 class EmailJob(ABC):
-    def __init__(self, email_data):
-        self.raw_email = email_data['raw_email']
-        self.raw_body = email_data['raw_body']
-        self.etree = email_data['etree']
-        self.text = email_data['text']
-
+    def __init__(self, email_context: MailContext):
+        self.raw_email = email_context.raw_email
+        self.raw_body = email_context.raw_body
+        self.etree = email_context.etree
+        self.text = email_context.text
+    
     async def execute(self):
         try:
             result = await (self.mock_run() if app_settings.MOCK_RESPONSES else self.run())
