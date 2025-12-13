@@ -50,6 +50,7 @@ class MailBase(SQLModel):
                 errors.append(result_pair)
             else:
                 prepared_results[result_pair['job_name']] = result_pair['result']
+        errors = errors if errors else None
         return prepared_results, errors
 
 

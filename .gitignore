@@ -167,3 +167,5 @@ cython_debug/
 # Secrets
 src/ai_config.json
 ai_config.json
+
+mail_retention.db
