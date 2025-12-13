@@ -15,8 +15,6 @@ class MailContext:
     text: str
     etree: Any = field(repr=False)
 
-    
-
     @classmethod
     def from_envelope(cls, envelope):
         raw_email = envelope.content.decode('unicode_escape', errors='replace')

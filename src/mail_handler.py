@@ -3,13 +3,14 @@ from src.job_executor import JobExecutor
 from src.mail_context import MailContext
 from src.models import MailSQLite 
 import threading
+import asyncio
 
 class MailHandler:
     async def handle_DATA(self, server, session, envelope):
         print(f"[blue]Received on thread: {threading.get_ident()}[/blue]")
         print("Message from:", envelope.mail_from)
         print("Message to:", envelope.rcpt_tos)
-        await MailHandler.process_email(envelope)
+        asyncio.create_task(MailHandler.process_email(envelope))
         print("250 OK - Email is being processed asynchronously.")
         return '250 OK'
     
