@@ -1,6 +1,5 @@
 import asyncio
 import importlib
-import inspect
 from pathlib import Path
 
 class JobExecutor:
@@ -14,7 +13,7 @@ class JobExecutor:
         return results
 
     def create_jobs(self):
-        return [job_class(self.mail_context) for job_class in JobExecutor.get_job_classes()]
+        return [job_class(self.mail_context) for job_class in self._job_classes]
 
     @classmethod
     def get_job_classes(cls):        
@@ -24,7 +23,7 @@ class JobExecutor:
         jobs_dir = Path(__file__).parent / 'jobs'
         job_classes = []
 
-        # Pre-filter files to avoid unnecessary globbing overhead if directory is large
+        # Pre-filter files to avoid unnecessa87 ry globbing overhead if directory is large
         # though glob is generally fast enough for typical source trees.
         # The main bottleneck is importlib.import_module.
         
