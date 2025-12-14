@@ -14,18 +14,25 @@ class MailBase(SQLModel):
     sender: str
     recipient: str
     subject: str
+        
+    def to_dict(self):
+        return self.model_dump()
+
+
+class MailSQLite(MailBase, table=True):
+    __tablename__ = "mail_cache"
+    
+    id: Optional[int] = Field(default=None, primary_key=True)
+    external_id: Optional[int] = Field(default=None, index=True)
     body: str
     raw_email: str
     job_results: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON))
     errors: Optional[List[Dict[str, Any]]] = Field(default=None, sa_column=Column(JSON))
     state: MailState = Field(default=MailState.RECEIVED, index=True)
-    
-    def to_dict(self):
-        return self.model_dump()
 
-    @classmethod
-    def from_context(cls, mail_context: MailContext):
-        return cls(
+    @staticmethod
+    def from_context(mail_context: MailContext):
+        return MailSQLite(
             time_received = mail_context.time_received,
             sender = mail_context.sender,
             recipient = mail_context.recipient,
@@ -54,8 +61,24 @@ class MailBase(SQLModel):
         return prepared_results, errors
 
 
-class MailSQLite(MailBase, table=True):
-    __tablename__ = "mail_data"
+class MailPostgres(MailBase, table=True):
+    __tablename__ = "mail"
     
     id: Optional[int] = Field(default=None, primary_key=True)
-    external_id: Optional[int] = Field(default=None, index=True)
+    body_url: str
+    raw_email_url: str
+    job_results: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON))
+
+    @staticmethod
+    def from_sqlite_model(mail_sqlite: MailSQLite, body_url: str, raw_email_url: str):
+        return MailPostgres(
+            time_received = mail_sqlite.time_received,
+            sender = mail_sqlite.sender,
+            recipient = mail_sqlite.recipient,
+            subject = mail_sqlite.subject,
+            body_url = body_url,
+            raw_email_url = raw_email_url,
+            job_results = mail_sqlite.job_results,
+            errors = mail_sqlite.errors,
+            state = mail_sqlite.state,
+        )
