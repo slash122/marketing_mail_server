@@ -8,9 +8,11 @@ class AppSettings(BaseSettings):
     SMTP_PORT: int = 1025
     SMTP_HOST: str = "0.0.0.0"
     SQLITE_DB_PATH: str = "./db/mail_retention.db"
-    POSTGRES_CONNECTION_STR: str
+    POSTGRES_CONNECTION_STRING: str
     AZURE_STORAGE_CONNECTION_STRING: str
     AZURE_BLOB_CONTAINER_NAME: str = "mail-content-container"
+    AZURE_APPLICATION_INSIGHTS_CONNECTION_STRING: str
+    
     class Config:
         env_file = ".env"
 

@@ -10,9 +10,9 @@ class SQLiteConnector:
         self.async_session = sessionmaker(
             self.async_engine, class_=AsyncSession, expire_on_commit=False
         )
-        self._init_db()
+        self.__init_db()
 
-    def _init_db(self):
+    def __init_db(self):
         sync_engine = create_engine(f"sqlite:///{app_settings.SQLITE_DB_PATH}")
         SQLModel.metadata.create_all(
             sync_engine, 

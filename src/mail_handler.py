@@ -40,4 +40,4 @@ class MailHandler:
         mail_id = await postgres_db.save_email(mail_data_main)
         mail_data.external_id = mail_id
         await sqlite_db.update_email(mail_data)
-        print("Saved to main DB")
+        

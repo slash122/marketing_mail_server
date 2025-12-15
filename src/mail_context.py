@@ -20,7 +20,7 @@ class MailContext:
         raw_email = envelope.content.decode('unicode_escape', errors='replace')
         msg = message_from_bytes(envelope.content)
         subject = msg.get('Subject', 'No Subject')
-        raw_body = MailContext._collect_raw_body(msg)
+        raw_body = MailContext.__collect_raw_body(msg)
         html_tree = etree.fromstring(raw_body, parser=etree.HTMLParser())
         text_content = etree.tostring(html_tree, method='text', encoding='unicode')
 
@@ -37,7 +37,7 @@ class MailContext:
     
     # TODO: Improve codestyle of vibecoded method
     @staticmethod
-    def _collect_raw_body(msg):
+    def __collect_raw_body(msg):
         raw_body = ""
         if msg.is_multipart():
             # Iterate over parts to find the best body candidate

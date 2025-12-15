@@ -6,7 +6,7 @@ from src.models import MailPostgres
 
 class PostgresConnector:
     def __init__(self):
-        self.engine = create_async_engine(f"postgresql+asyncpg://{app_settings.POSTGRES_CONNECTION_STR}")
+        self.engine = create_async_engine(f"postgresql+asyncpg://{app_settings.POSTGRES_CONNECTION_STRING}")
         self.async_session = sessionmaker(
             self.engine, class_=AsyncSession, expire_on_commit=False
         )
