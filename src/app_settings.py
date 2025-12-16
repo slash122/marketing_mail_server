@@ -13,6 +13,7 @@ class AppSettings(BaseSettings):
     AZURE_STORAGE_CONNECTION_STRING: SecretStr
     AZURE_BLOB_CONTAINER_NAME: str = "mail-content-container"
     LOGGER_NAME: str = "marketing-mail-server-logger"
+    TRACER_NAME: str = "marketing-mail-server-tracer"
     AZURE_LOGGING: bool = False
     AZURE_INSIGHTS_CONNECTION_STRING: SecretStr
     

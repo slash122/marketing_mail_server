@@ -1,5 +1,3 @@
-from rich import print
-import threading
 from src.mail_handler import MailHandler
 from aiosmtpd.controller import Controller
 from src.app_settings import app_settings

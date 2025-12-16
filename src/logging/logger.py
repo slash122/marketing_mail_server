@@ -9,11 +9,12 @@ if app_settings.AZURE_LOGGING:
         logger_name=app_settings.LOGGER_NAME,
         connection_string=app_settings.AZURE_INSIGHTS_CONNECTION_STRING.get_secret_value()
     )
+    
 logger = logging.getLogger(app_settings.LOGGER_NAME)
-logger.setLevel(logging.INFO) # Set the minimum level for all handlers
+logger.setLevel(logging.INFO)
 
 console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(logging.INFO) # Set the minimum level for the console
+console_handler.setLevel(logging.INFO)
 console_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 console_handler.setFormatter(console_formatter)
 
