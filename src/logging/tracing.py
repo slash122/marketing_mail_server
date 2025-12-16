@@ -11,7 +11,6 @@ tracer: trace.Tracer = None
 
 if app_settings.AZURE_LOGGING:
     try:
-        tracer = trace.get_tracer(app_settings.TRACER_NAME)
         tracer_provider = TracerProvider()
         trace.set_tracer_provider(tracer_provider)
         exporter = AzureMonitorTraceExporter(
@@ -19,6 +18,7 @@ if app_settings.AZURE_LOGGING:
         )
         span_processor = BatchSpanProcessor(exporter)
         tracer_provider.add_span_processor(span_processor)
+        tracer = trace.get_tracer(app_settings.TRACER_NAME)
         logger.info("Azure Tracing Enabled.")
     except Exception as e:
         logger.error(f"Failed to initialize Azure Tracing: {e}")
