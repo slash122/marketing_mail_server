@@ -16,7 +16,7 @@ class MailHandler:
         asyncio.create_task(process_email(envelope))
         return '250 OK'
     
-
+    
 async def process_email(envelope):
     mail_data, mail_context = await save_to_retention_db(envelope)
     mail_data = await core_processing(mail_data, mail_context)
