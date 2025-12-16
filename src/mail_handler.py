@@ -28,7 +28,8 @@ async def process_email(envelope):
     if mail_data.state == MailState.PROCESSED:
         await save_to_main_db(mail_data)
         logger.info(f"Finished pipeline for mail, from: {mail_context.sender}, main db id: {mail_data.external_id}")
-    logger.error(f"Some jobs failed for mail, from: {mail_context.sender}, retention db id: {mail_data.id}, errors: {mail_data.errors}")
+    else:
+        logger.error(f"Some jobs failed for mail, from: {mail_context.sender}, retention db id: {mail_data.id}, errors: {mail_data.errors}")
     
 @trace_async
 async def save_to_retention_db(mail_context) -> MailSQLite:
