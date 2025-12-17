@@ -27,8 +27,8 @@ async def process_email(envelope):
     mail_data = await core_processing(mail_data, mail_context)
     logger.info(f"Completed jobs for mail, from: {mail_context.sender}, retention db id: {mail_data.id}")
     
+    await save_to_main_db(mail_data)
     if mail_data.state == MailState.PROCESSED:
-        await save_to_main_db(mail_data)
         logger.info(f"Finished pipeline for mail, from: {mail_context.sender}, main db id: {mail_data.external_id}")
     else:
         logger.error(f"Some jobs failed for mail, from: {mail_context.sender}, retention db id: {mail_data.id}, errors: {mail_data.errors}")

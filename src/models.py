@@ -14,6 +14,7 @@ class MailBase(SQLModel):
     sender: str
     recipient: str
     subject: str
+    state: MailState = Field(default=MailState.RECEIVED, index=True)
         
     def to_dict(self):
         return self.model_dump()
@@ -28,7 +29,6 @@ class MailSQLite(MailBase, table=True):
     raw_email: str
     job_results: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON))
     errors: Optional[List[Dict[str, Any]]] = Field(default=None, sa_column=Column(JSON))
-    state: MailState = Field(default=MailState.RECEIVED, index=True)
 
     @staticmethod
     def from_context(mail_context: MailContext):
@@ -68,6 +68,7 @@ class MailPostgres(MailBase, table=True):
     body_url: str
     raw_email_url: str
     job_results: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON))
+    errors: Optional[List[Dict[str, Any]]] = Field(default=None, sa_column=Column(JSON))
 
     @staticmethod
     def from_sqlite_model(mail_sqlite: MailSQLite, body_url: str, raw_email_url: str):
