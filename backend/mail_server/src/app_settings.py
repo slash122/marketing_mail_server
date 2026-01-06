@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings
 from pydantic import SecretStr
+from pydantic_settings import BaseSettings
+
 
 # Settings which pull vars from .env file, have default values which can be OVERRIDEN BY .env
 class AppSettings(BaseSettings):
@@ -16,9 +17,10 @@ class AppSettings(BaseSettings):
     TRACER_NAME: str = "marketing-mail-server-tracer"
     AZURE_LOGGING: bool = False
     AZURE_INSIGHTS_CONNECTION_STRING: SecretStr
-    INIT_DB_ON_STARTUP: bool = True
-    
+    INIT_DB_ON_STARTUP: bool = False
+
     class Config:
         env_file = ".env"
+
 
 app_settings = AppSettings()

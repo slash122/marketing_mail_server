@@ -1,7 +1,10 @@
-from typing import Optional, List, Dict, Any
-from sqlmodel import SQLModel, Field, JSON, Column, Relationship
-from sqlalchemy import Text
+from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from sqlalchemy import Text
+from sqlmodel import JSON, Column, Field, Relationship, SQLModel
+
 
 class SenderAccountLink(SQLModel, table=True):
     __tablename__ = "sender_account_link"
@@ -17,7 +20,7 @@ class AccountType(str, Enum):
 
 class Account(SQLModel, table=True):
     __tablename__ = "account"
-    
+
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str = Field(index=True, unique=True)
     info: str = Field(sa_column=Column("info", Text))
@@ -39,9 +42,7 @@ class Sender(SQLModel, table=True):
     accounts: List["Account"] = Relationship(back_populates="senders", link_model=SenderAccountLink)  # type: ignore
     mails: List["Mail"] = Relationship(
         back_populates="sender_model",
-        sa_relationship_kwargs={
-            "primaryjoin": "foreign(Mail.sender) == Sender.mail_address"
-        }
+        sa_relationship_kwargs={"primaryjoin": "foreign(Mail.sender) == Sender.mail_address"},
     )
 
 
@@ -54,9 +55,9 @@ class MailState(str, Enum):
 # TODO: Move shared logic from mail server to separate directory/package
 class Mail(SQLModel, table=True):
     __tablename__ = "mail"
-    
+
     id: Optional[int] = Field(default=None, primary_key=True)
-    time_received: int
+    time_received: datetime
     sender: str
     recipient: str
     subject: str
@@ -72,13 +73,13 @@ class Mail(SQLModel, table=True):
             "primaryjoin": "foreign(Mail.sender) == Sender.mail_address",
             "uselist": False,
             "viewonly": True,
-        }
+        },
     )
 
 
 class User(SQLModel, table=True):
     __tablename__ = "user"
-    
+
     id: Optional[int] = Field(default=None, primary_key=True)
     username: str = Field(index=True, unique=True)
     info: str = Field(sa_column=Column("info", Text))
@@ -86,4 +87,4 @@ class User(SQLModel, table=True):
     is_active: bool = Field(default=True)
     account_id: int = Field(foreign_key="account.id")
 
-    account: Account = Relationship(back_populates="users") # type: ignore
+    account: Account = Relationship(back_populates="users")  # type: ignore

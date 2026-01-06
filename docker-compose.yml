@@ -1,13 +1,13 @@
 services:
   smtp-server:
-    build: ./backend/mail_server 
+    build: ./backend/mail_server
     container_name: mail_server
     env_file:
-      - ./backend/mail_server/.env 
+      - ./backend/mail_server/.env
     ports:
       - "25:1025"
     volumes:
-      - ./backend/mail_server/db:/app/db 
+      - ./backend/mail_server/db:/app/db
     environment:
       - PYTHONUNBUFFERED=1
       - MOCK_RESPONSES=0
@@ -48,6 +48,6 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
-  
+
 volumes:
-  postgres_data: 
+  postgres_data:

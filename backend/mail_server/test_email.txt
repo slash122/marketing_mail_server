@@ -8,15 +8,15 @@
 </head>
 <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
     <h1 style="color: #333;">Welcome to Our Newsletter</h1>
-    
+
     <p>Dear Valued Customer,</p>
-    
+
     <p>We are excited to share our latest updates with you. Our team has been working tirelessly to bring you innovative solutions that enhance your daily experience. This month we are launching three new features that will revolutionize how you interact with our platform.</p>
-    
+
     <p>First, our advanced analytics dashboard provides real-time insights into your performance metrics. Second, we have introduced seamless integration with popular third-party applications. Finally, our enhanced security protocols ensure your data remains protected at all times.</p>
-    
+
     <p>Visit our <a href="https://example.com">website</a> to learn more about these exciting developments.</p>
-    
+
     <p>Best regards,<br>
     The Team</p>
 </body>

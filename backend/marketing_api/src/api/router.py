@@ -1,7 +1,5 @@
 from fastapi import APIRouter
-from src.api.endpoints import test
-from src.api.endpoints import users, accounts, senders
-
+from src.api.endpoints import accounts, senders, test, users
 
 router = APIRouter()
 router.include_router(test.router, prefix="/test", tags=["test"])

@@ -11,6 +11,6 @@ msg["To"] = "receiver@example.com"
 try:
     with smtplib.SMTP("0.0.0.0", 1025) as server:
         server.send_message(msg)
-except Exception as e:
+except Exception:
     with smtplib.SMTP("localhost", 25) as server:
         server.send_message(msg)

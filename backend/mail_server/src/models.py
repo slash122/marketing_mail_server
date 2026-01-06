@@ -1,28 +1,35 @@
-from typing import Optional, Dict, List, Any
-from sqlmodel import SQLModel, Field, JSON
-from sqlalchemy import Column
+from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from sqlalchemy import Column, DateTime
+from sqlalchemy.dialects.postgresql import TIMESTAMP
+from sqlmodel import JSON, Field, SQLModel
+
 from src.mail_context import MailContext
+
 
 class MailState(str, Enum):
     RECEIVED = "received"
     PROCESSED = "processed"
     FAILED = "failed"
 
+
 class MailBase(SQLModel):
-    time_received: int
-    sender: str 
+    time_received: datetime
+    sender: str
     recipient: str
     subject: str
     state: MailState = Field(default=MailState.RECEIVED, index=True)
-        
+
     def to_dict(self):
         return self.model_dump()
 
 
 class MailSQLite(MailBase, table=True):
     __tablename__ = "mail_cache"
-    
+
+    time_received: datetime = Field(sa_column=Column(DateTime(timezone=True)))
     id: Optional[int] = Field(default=None, primary_key=True)
     external_id: Optional[int] = Field(default=None, index=True)
     body: str
@@ -33,15 +40,15 @@ class MailSQLite(MailBase, table=True):
     @staticmethod
     def from_context(mail_context: MailContext):
         return MailSQLite(
-            time_received = mail_context.time_received,
-            sender = mail_context.sender,
-            recipient = mail_context.recipient,
-            subject = mail_context.subject,
-            body = mail_context.raw_body, 
-            raw_email = mail_context.raw_email,
-            state = MailState.RECEIVED,
+            time_received=mail_context.time_received,
+            sender=mail_context.sender,
+            recipient=mail_context.recipient,
+            subject=mail_context.subject,
+            body=mail_context.raw_body,
+            raw_email=mail_context.raw_email,
+            state=MailState.RECEIVED,
         )
-    
+
     def append_job_results(self, raw_job_results: List[Dict[str, Any]]):
         prepared_results, errors = self.__prepare_job_results(raw_job_results)
         self.job_results = prepared_results
@@ -53,17 +60,18 @@ class MailSQLite(MailBase, table=True):
         prepared_results = {}
         errors = []
         for result_pair in raw_job_results:
-            if 'exception' in result_pair:
+            if "exception" in result_pair:
                 errors.append(result_pair)
             else:
-                prepared_results[result_pair['job_name']] = result_pair['result']
+                prepared_results[result_pair["job_name"]] = result_pair["result"]
         errors = errors if errors else None
         return prepared_results, errors
 
 
 class MailPostgres(MailBase, table=True):
     __tablename__ = "mail"
-    
+
+    time_received: datetime = Field(sa_column=Column(TIMESTAMP(timezone=True, precision=0)))
     id: Optional[int] = Field(default=None, primary_key=True)
     body_url: str
     raw_email_url: str
@@ -73,13 +81,13 @@ class MailPostgres(MailBase, table=True):
     @staticmethod
     def from_sqlite_model(mail_sqlite: MailSQLite, body_url: str, raw_email_url: str):
         return MailPostgres(
-            time_received = mail_sqlite.time_received,
-            sender = mail_sqlite.sender,
-            recipient = mail_sqlite.recipient,
-            subject = mail_sqlite.subject,
-            body_url = body_url,
-            raw_email_url = raw_email_url,
-            job_results = mail_sqlite.job_results,
-            errors = mail_sqlite.errors,
-            state = mail_sqlite.state,
+            time_received=mail_sqlite.time_received,
+            sender=mail_sqlite.sender,
+            recipient=mail_sqlite.recipient,
+            subject=mail_sqlite.subject,
+            body_url=body_url,
+            raw_email_url=raw_email_url,
+            job_results=mail_sqlite.job_results,
+            errors=mail_sqlite.errors,
+            state=mail_sqlite.state,
         )

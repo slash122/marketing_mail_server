@@ -1,12 +1,15 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr
 from src.models import AccountType
+
 
 class UserRegisterPayload(BaseModel):
     username: EmailStr
     password: str
     account_id: int
     info: str | None = None
-    
+
 
 class UserRegisterResponse(BaseModel):
     id: int
@@ -52,7 +55,7 @@ class SenderResponse(BaseModel):
 
 class MailHeaderResponse(BaseModel):
     id: int
-    time_received: int
+    time_received: datetime
     sender: str
     subject: str
 
@@ -62,7 +65,7 @@ class MailHeaderResponse(BaseModel):
 
 class MailResponse(BaseModel):
     id: int
-    time_received: int
+    time_received: datetime
     sender: str
     recipient: str
     subject: str

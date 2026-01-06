@@ -1,5 +1,6 @@
-from pydantic_settings import BaseSettings
 from pydantic import SecretStr
+from pydantic_settings import BaseSettings
+
 
 # Settings which pull vars from .env file, have default values which can be OVERRIDEN BY .env
 class AppSettings(BaseSettings):
@@ -8,8 +9,9 @@ class AppSettings(BaseSettings):
     # TODO: Add logging and tracing
     # LOGGER_NAME: str = "marketing-api-logger"
     # TRACER_NAME: str = "marketing-api-tracer"
-    
+
     class Config:
         env_file = ".env"
+
 
 app_settings = AppSettings()
